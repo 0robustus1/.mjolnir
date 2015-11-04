@@ -31,6 +31,28 @@ local function opendictionary()
   application.launchorfocus("Dictionary")
 end
 
+local function focus_first_valid_window(ordered_wins)
+  for _, win in pairs(ordered_wins) do
+    win:focus()
+    if window.focusedwindow():id() == win:id() then return true end
+  end
+  return false
+end
+
+local function focusnextwindow()
+  local app_windows = application.allwindows(window.focusedwindow():application())
+  local current_id = window.focusedwindow():id()
+  local bigger_windows = fnutils.filter(app_windows, function(win) return (win:id() > current_id) end)
+  local smaller_windows = fnutils.filter(app_windows, function(win) return (win:id() < current_id) end)
+  table.sort(bigger_windows, function(a, b) return a:id() < b:id() end)
+  table.sort(smaller_windows, function(a, b) return a:id() < b:id() end)
+  if not focus_first_valid_window(bigger_windows) then
+    focus_first_valid_window(smaller_windows)
+  end
+end
+
+hotkey.bind({"ctrl"}, "tab", focusnextwindow)
+
 -- Maximize and Minimize the current window
 hotkey.bind(hit, 'M', grid.maximize_window)
 hotkey.bind(hits, 'M', function() window.focusedwindow():minimize() end)
