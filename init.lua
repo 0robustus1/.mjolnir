@@ -53,6 +53,9 @@ end
 
 hotkey.bind({"ctrl"}, "tab", focusnextwindow)
 
+hotkey.bind(hits, 'R', mjolnir.reload)
+hotkey.bind(hits, 'T', function() alert.show(os.date("%A %b %d, %Y - %I:%M%p"), 4) end)
+
 -- Maximize and Minimize the current window
 hotkey.bind(hit, 'M', grid.maximize_window)
 hotkey.bind(hits, 'M', function() window.focusedwindow():minimize() end)
